@@ -1,0 +1,81 @@
+commandsPreDeploy:
+  - id: e27d7df2-fbec-4375-b6c9-59c8c24f1d1e
+    label: DA E2E pre command
+    type: command
+    command: echo DA_E2E_PRE_COMMAND_MARKER
+    context: all
+    allowFailure: false
+    runOnlyOnceByOrg: true
+  - id: ad52b44e-3f41-43ba-8f2c-0b1bf50694ec
+    label: DA E2E remove skipped class
+    type: remove-packagexml-items
+    command: ""
+    context: all
+    parameters:
+      packageXmlItems:
+        - ApexClass:E2ESkipped
+    allowFailure: false
+    runOnlyOnceByOrg: false
+commandsPostDeploy:
+  - id: a1f0a1d1-1a4c-4848-9996-c16f94462bda
+    label: DA E2E apex account
+    type: apex
+    command: ""
+    context: process-deployment-only
+    parameters:
+      apexScript: scripts/apex/da-e2e-account.apex
+    allowFailure: false
+    runOnlyOnceByOrg: true
+  - id: 5d488f01-eda2-4504-84c8-c3333fa96210
+    label: DA E2E run batch
+    type: run-batch
+    command: ""
+    context: process-deployment-only
+    parameters:
+      className: E2EBatch
+      runMode: wait
+      waitTimeoutMinutes: 10
+    allowFailure: false
+    runOnlyOnceByOrg: true
+  - id: 7052b2b5-1362-48a1-a5d7-a7338a5691ab
+    label: DA E2E schedule batch
+    type: schedule-batch
+    command: ""
+    context: process-deployment-only
+    parameters:
+      className: E2EBatch
+      cronExpression: 0 0 3 * * ?
+    allowFailure: false
+    runOnlyOnceByOrg: true
+  - id: 2c2369b8-7ce6-4c06-bc50-972cfaa3381a
+    label: DA E2E policy apply to all
+    type: user-access-policy
+    command: ""
+    context: process-deployment-only
+    parameters:
+      policies:
+        - UAP_Spike_Policy
+      activate: true
+      applyToAll: true
+    allowFailure: false
+    runOnlyOnceByOrg: false
+  - id: d9d50b09-62e5-4bdb-a8d8-95944f339431
+    label: DA E2E browser density
+    type: browser
+    command: ""
+    context: all
+    parameters:
+      setting: densitySettings
+      config:
+        density: ${DA_E2E_DENSITY}
+    allowFailure: false
+    runOnlyOnceByOrg: true
+  - id: 4c8a6f85-92fe-4582-abeb-8a271dd655d2
+    label: DA E2E manual step
+    type: manual
+    command: ""
+    context: process-deployment-only
+    parameters:
+      instructions: Check the e2e org
+    allowFailure: false
+    runOnlyOnceByOrg: true
