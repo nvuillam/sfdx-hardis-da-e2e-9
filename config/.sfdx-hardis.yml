@@ -1,0 +1,17 @@
+projectName: sfdx-hardis-da-e2e
+developmentBranch: integration
+useDeltaDeployment: false
+testLevel: NoTestRun
+commandsPostDeploy:
+  - id: da-e2e-project-once
+    label: DA E2E project command once
+    type: command
+    command: echo DA_E2E_PROJECT_ONCE_MARKER
+    context: process-deployment-only
+  - id: da-e2e-project-uap
+    label: DA E2E project policy every time
+    type: user-access-policy
+    parameters:
+      policies:
+        - UAP_Spike_Policy
+    context: process-deployment-only
